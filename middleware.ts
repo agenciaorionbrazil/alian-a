@@ -1,10 +1,24 @@
-import type { NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
+type LogContext = Record<string, string | number | boolean | null | undefined>;
 
-export async function middleware(request: NextRequest) {
-  return updateSession(request);
+const blockedKeys = ["password", "token", "secret", "answer", "reflection", "feeling", "sos"];
+
+function sanitizeContext(context: LogContext = {}) {
+  return Object.fromEntries(
+    Object.entries(context).map(([key, value]) => {
+      const shouldRedact = blockedKeys.some((blockedKey) => key.toLowerCase().includes(blockedKey));
+      return [key, shouldRedact ? "[redacted]" : value];
+    })
+  );
 }
 
-export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"]
+export const logger = {
+  info(message: string, context?: LogContext) {
+    console.info(message, sanitizeContext(context));
+  },
+  warn(message: string, context?: LogContext) {
+    console.warn(message, sanitizeContext(context));
+  },
+  error(message: string, context?: LogContext) {
+    console.error(message, sanitizeContext(context));
+  }
 };

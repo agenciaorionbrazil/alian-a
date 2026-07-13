@@ -1,0 +1,27 @@
+import { z } from "zod";
+
+export const createCoupleSchema = z.object({
+  relationshipType: z.enum(["dating", "engaged", "married", "other"]),
+  startedOn: z.string().optional(),
+  journeyName: z.string().max(80, "Use ate 80 caracteres.").optional()
+});
+
+export const createInviteSchema = z
+  .object({
+    coupleId: z.string().uuid("Casal invalido."),
+    invitedEmail: z.string().email("Informe um e-mail valido.").optional().or(z.literal("")),
+    invitedPhone: z.string().max(30, "Telefone muito longo.").optional().or(z.literal(""))
+  })
+  .refine((value) => Boolean(value.invitedEmail || value.invitedPhone), {
+    message: "Informe e-mail ou telefone.",
+    path: ["invitedEmail"]
+  });
+
+export const acceptInviteSchema = z.object({
+  code: z.string().min(8, "Codigo invalido."),
+  token: z.string().min(32, "Token invalido.")
+});
+
+export type CreateCoupleInput = z.infer<typeof createCoupleSchema>;
+export type CreateInviteInput = z.infer<typeof createInviteSchema>;
+export type AcceptInviteInput = z.infer<typeof acceptInviteSchema>;
