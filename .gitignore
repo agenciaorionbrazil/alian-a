@@ -1,0 +1,11 @@
+node_modules
+.npm-cache
+.corepack
+.next
+out
+coverage
+.env
+.env.local
+.env.*.local
+*.tsbuildinfo
+dist
