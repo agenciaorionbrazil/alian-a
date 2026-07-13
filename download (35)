@@ -1,0 +1,11 @@
+import { BrandLogo } from "@/components/brand";
+import { Avatar } from "@/components/ui";
+
+export function MobileHeader() {
+  return (
+    <header className="sticky top-0 z-20 flex min-h-16 items-center justify-between border-b border-divider bg-background-main/95 px-4 backdrop-blur lg:hidden">
+      <BrandLogo className="w-36" />
+      <Avatar />
+    </header>
+  );
+}

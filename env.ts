@@ -1,24 +1,12 @@
-"use client";
+import { AuthShell } from "@/components/layout";
+import { SignUpForm } from "@/features/auth/sign-up-form";
 
-import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui";
-import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+export const metadata = { title: "Cadastro" };
 
-export function SignOutButton() {
-  const router = useRouter();
-
-  async function signOut() {
-    const supabase = createSupabaseBrowserClient();
-    await supabase.auth.signOut();
-    router.replace("/entrar");
-    router.refresh();
-  }
-
+export default function SignUpPage() {
   return (
-    <Button onClick={signOut} type="button" variant="secondary">
-      <LogOut className="size-4" />
-      Sair
-    </Button>
+    <AuthShell description="Crie seu perfil individual. O papel de administrador nunca e selecionado no cadastro publico." title="Criar conta">
+      <SignUpForm />
+    </AuthShell>
   );
 }

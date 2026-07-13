@@ -1,27 +1,34 @@
-import { z } from "zod";
+name: CI
 
-export const createCoupleSchema = z.object({
-  relationshipType: z.enum(["dating", "engaged", "married", "other"]),
-  startedOn: z.string().optional(),
-  journeyName: z.string().max(80, "Use ate 80 caracteres.").optional()
-});
+on:
+  push:
+    branches: ["main"]
+  pull_request:
 
-export const createInviteSchema = z
-  .object({
-    coupleId: z.string().uuid("Casal invalido."),
-    invitedEmail: z.string().email("Informe um e-mail valido.").optional().or(z.literal("")),
-    invitedPhone: z.string().max(30, "Telefone muito longo.").optional().or(z.literal(""))
-  })
-  .refine((value) => Boolean(value.invitedEmail || value.invitedPhone), {
-    message: "Informe e-mail ou telefone.",
-    path: ["invitedEmail"]
-  });
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-export const acceptInviteSchema = z.object({
-  code: z.string().min(8, "Codigo invalido."),
-  token: z.string().min(32, "Token invalido.")
-});
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-export type CreateCoupleInput = z.infer<typeof createCoupleSchema>;
-export type CreateInviteInput = z.infer<typeof createInviteSchema>;
-export type AcceptInviteInput = z.infer<typeof acceptInviteSchema>;
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build

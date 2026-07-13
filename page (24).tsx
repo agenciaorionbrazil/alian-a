@@ -1,16 +1,14 @@
-"use client";
+import { NextResponse, type NextRequest } from "next/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-import { Button, ErrorState } from "@/components/ui";
+export async function GET(request: NextRequest) {
+  const requestUrl = new URL(request.url);
+  const code = requestUrl.searchParams.get("code");
 
-export default function Error({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
-  return (
-    <main className="grid min-h-screen place-items-center bg-background-main px-4">
-      <div className="w-full max-w-lg">
-        <ErrorState description="Encontramos um erro inesperado. Tente novamente em instantes." title="Algo saiu do fluxo" />
-        <Button className="mt-5" onClick={reset} type="button">
-          Tentar novamente
-        </Button>
-      </div>
-    </main>
-  );
+  if (code) {
+    const supabase = await createSupabaseServerClient();
+    await supabase.auth.exchangeCodeForSession(code);
+  }
+
+  return NextResponse.redirect(new URL("/hoje", requestUrl.origin));
 }

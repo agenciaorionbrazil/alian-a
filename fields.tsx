@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import { PlatformShell } from "@/components/layout";
 import { hasSupabaseEnv } from "@/lib/env";
-import { requireAdmin } from "@/lib/auth/session";
+import { requireUser } from "@/lib/auth/session";
 
-export default async function AdminLayout({ children }: { children: ReactNode }) {
+export default async function PlatformLayout({ children }: { children: ReactNode }) {
   if (hasSupabaseEnv()) {
-    await requireAdmin();
+    await requireUser();
   }
 
   return <PlatformShell>{children}</PlatformShell>;

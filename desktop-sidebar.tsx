@@ -1,8 +1,8 @@
-import { ShieldCheck } from "lucide-react";
+import { HandHeart } from "lucide-react";
 import { EmptyModule } from "@/features/platform/empty-module";
 
-export const metadata = { title: "Admin" };
+export const metadata = { title: "Oracoes" };
 
-export default function AdminPage() {
-  return <EmptyModule description="Area administrativa protegida por perfil admin e politicas no banco." icon={ShieldCheck} title="Admin" />;
+export default function PrayersPage() {
+  return <EmptyModule description="Pedidos de oracao privados, compartilhados voluntariamente ou conjuntos." icon={HandHeart} title="Oracoes" />;
 }

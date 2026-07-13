@@ -1,34 +1,8 @@
-import type { Metadata, Viewport } from "next";
-import { PWARegister } from "@/components/pwa-register";
-import "./globals.css";
+import { ShieldCheck } from "lucide-react";
+import { EmptyModule } from "@/features/platform/empty-module";
 
-export const metadata: Metadata = {
-  title: {
-    default: "ALIANCA",
-    template: "%s | ALIANCA"
-  },
-  description: "Fortaleca sua fe. Proteja seu relacionamento.",
-  applicationName: "ALIANCA",
-  manifest: "/manifest.webmanifest",
-  icons: {
-    icon: "/brand/alianca-logo.png",
-    apple: "/brand/alianca-logo.png"
-  }
-};
+export const metadata = { title: "Admin" };
 
-export const viewport: Viewport = {
-  themeColor: "#7A2348",
-  width: "device-width",
-  initialScale: 1
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html lang="pt-BR">
-      <body>
-        {children}
-        <PWARegister />
-      </body>
-    </html>
-  );
+export default function AdminPage() {
+  return <EmptyModule description="Area administrativa protegida por perfil admin e politicas no banco." icon={ShieldCheck} title="Admin" />;
 }

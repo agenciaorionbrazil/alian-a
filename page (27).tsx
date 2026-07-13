@@ -1,5 +1,6 @@
-import { LoadingState } from "@/components/ui";
+import type { ReactNode } from "react";
+import { PublicShell } from "@/components/layout";
 
-export default function Loading() {
-  return <LoadingState title="Preparando sua jornada" />;
+export default function PublicLayout({ children }: { children: ReactNode }) {
+  return <PublicShell>{children}</PublicShell>;
 }

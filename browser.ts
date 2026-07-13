@@ -1,15 +1,13 @@
-export class AppError extends Error {
-  constructor(
-    message: string,
-    public readonly code = "APP_ERROR",
-    public readonly safeMessage = "Nao foi possivel concluir esta acao."
-  ) {
-    super(message);
-  }
-}
+"use client";
 
-export function getSafeErrorMessage(error: unknown) {
-  if (error instanceof AppError) return error.safeMessage;
-  if (error instanceof Error) return error.message;
-  return "Nao foi possivel concluir esta acao.";
+import { useEffect } from "react";
+
+export function PWARegister() {
+  useEffect(() => {
+    if ("serviceWorker" in navigator && process.env.NODE_ENV === "production") {
+      navigator.serviceWorker.register("/sw.js").catch(() => undefined);
+    }
+  }, []);
+
+  return null;
 }

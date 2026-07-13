@@ -1,12 +1,17 @@
-import type { ReactNode } from "react";
-import { PlatformShell } from "@/components/layout";
-import { hasSupabaseEnv } from "@/lib/env";
-import { requireAdmin } from "@/lib/auth/session";
+import { PageHeader } from "@/components/ui";
+import { ProfileForm } from "@/features/platform/profile-form";
+import { SignOutButton } from "@/features/auth/sign-out-button";
 
-export default async function AdminLayout({ children }: { children: ReactNode }) {
-  if (hasSupabaseEnv()) {
-    await requireAdmin();
-  }
+export const metadata = { title: "Perfil" };
 
-  return <PlatformShell>{children}</PlatformShell>;
+export default function ProfilePage() {
+  return (
+    <>
+      <PageHeader description="Gerencie seus dados individuais. O papel administrativo nao pode ser alterado aqui." title="Perfil" />
+      <div className="grid gap-6">
+        <ProfileForm />
+        <SignOutButton />
+      </div>
+    </>
+  );
 }

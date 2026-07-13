@@ -1,36 +1,24 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import { describe, expect, it } from "vitest";
-
-const migration = readFileSync(
-  join(process.cwd(), "supabase/migrations/20260712201000_initial_security_foundation.sql"),
-  "utf8"
-);
-
-describe("initial security migration", () => {
-  it("enables RLS on private and shared data tables", () => {
-    for (const table of ["profiles", "onboarding_answers", "diagnostic_results", "sos_sessions"]) {
-      expect(migration).toContain(`alter table public.${table} enable row level security;`);
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "es2022"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
     }
-  });
-
-  it("does not grant admins automatic access to private answers or SOS sessions", () => {
-    const privateAnswerPolicies = migration
-      .split("\n")
-      .filter((line) => line.includes("onboarding_answers") || line.includes("sos_sessions"))
-      .join("\n");
-
-    expect(privateAnswerPolicies).not.toContain("is_admin");
-  });
-
-  it("uses non-predictable public invite codes", () => {
-    expect(migration).toContain("default encode(gen_random_bytes(8), 'hex')");
-  });
-
-  it("exposes RPC flows for couple creation and secure invite acceptance", () => {
-    expect(migration).toContain("create or replace function public.create_couple_with_member");
-    expect(migration).toContain("create or replace function public.create_partner_invite");
-    expect(migration).toContain("create or replace function public.accept_partner_invite");
-    expect(migration).toContain("crypt(p_token, gen_salt('bf'))");
-  });
-});
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
