@@ -1,12 +1,12 @@
 import { AuthShell } from "@/components/layout";
-import { RecoverPasswordForm } from "@/features/auth/recover-password-form";
+import { SignUpForm } from "@/features/auth/sign-up-form";
 
-export const metadata = { title: "Recuperar senha" };
+export const metadata = { title: "Cadastro" };
 
-export default function RecoverPasswordPage() {
+export default function SignUpPage() {
   return (
-    <AuthShell description="Receba um link seguro para definir uma nova senha." title="Recuperar senha">
-      <RecoverPasswordForm />
+    <AuthShell description="Crie seu perfil individual. O papel de administrador nunca e selecionado no cadastro publico." title="Criar conta">
+      <SignUpForm />
     </AuthShell>
   );
 }

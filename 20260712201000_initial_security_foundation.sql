@@ -1,8 +1,14 @@
-export * from "./avatar";
-export * from "./button";
-export * from "./choice";
-export * from "./feedback";
-export * from "./fields";
-export * from "./headers";
-export * from "./icon-button";
-export * from "./overlays";
+import Link from "next/link";
+import { ShieldAlert } from "lucide-react";
+
+export function SOSFloatingButton() {
+  return (
+    <Link
+      aria-label="Abrir area SOS"
+      className="fixed bottom-24 right-4 z-20 inline-flex size-12 items-center justify-center rounded-full bg-danger text-white shadow-soft transition hover:bg-danger/90 lg:bottom-6"
+      href="/sos"
+    >
+      <ShieldAlert className="size-5" />
+    </Link>
+  );
+}

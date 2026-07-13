@@ -1,17 +1,8 @@
-import { PageHeader } from "@/components/ui";
-import { ProfileForm } from "@/features/platform/profile-form";
-import { SignOutButton } from "@/features/auth/sign-out-button";
+import { CalendarHeart } from "lucide-react";
+import { EmptyModule } from "@/features/platform/empty-module";
 
-export const metadata = { title: "Perfil" };
+export const metadata = { title: "Jornada" };
 
-export default function ProfilePage() {
-  return (
-    <>
-      <PageHeader description="Gerencie seus dados individuais. O papel administrativo nao pode ser alterado aqui." title="Perfil" />
-      <div className="grid gap-6">
-        <ProfileForm />
-        <SignOutButton />
-      </div>
-    </>
-  );
+export default function JourneyPage() {
+  return <EmptyModule description="Jornadas tematicas para crescimento espiritual, emocional e relacional." icon={CalendarHeart} title="Jornada" />;
 }

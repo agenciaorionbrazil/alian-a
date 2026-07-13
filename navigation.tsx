@@ -1,8 +1,16 @@
-import { Sparkles } from "lucide-react";
-import { EmptyModule } from "@/features/platform/empty-module";
+import { PageHeader } from "@/components/ui";
+import { SettingsForm } from "@/features/platform/settings-form";
 
-export const metadata = { title: "Gratidao" };
+export const metadata = { title: "Configuracoes" };
 
-export default function GratitudePage() {
-  return <EmptyModule description="Mural de gratidao para cultivar reconhecimento e presenca." icon={Sparkles} title="Gratidao" />;
+export default function SettingsPage() {
+  return (
+    <>
+      <PageHeader
+        description="Preferencias e consentimentos ficam persistidos individualmente. Consentimentos opcionais nunca sao pre-marcados."
+        title="Configuracoes"
+      />
+      <SettingsForm />
+    </>
+  );
 }

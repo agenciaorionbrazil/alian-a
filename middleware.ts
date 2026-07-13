@@ -1,24 +1,17 @@
-type LogContext = Record<string, string | number | boolean | null | undefined>;
+import { UserRound } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const blockedKeys = ["password", "token", "secret", "answer", "reflection", "feeling", "sos"];
+export function Avatar({ name, className }: { name?: string | null; className?: string }) {
+  const initials = name
+    ?.split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
 
-function sanitizeContext(context: LogContext = {}) {
-  return Object.fromEntries(
-    Object.entries(context).map(([key, value]) => {
-      const shouldRedact = blockedKeys.some((blockedKey) => key.toLowerCase().includes(blockedKey));
-      return [key, shouldRedact ? "[redacted]" : value];
-    })
+  return (
+    <span className={cn("inline-grid size-10 place-items-center rounded-full bg-background-soft text-sm font-semibold text-brand-primary", className)}>
+      {initials || <UserRound className="size-4" />}
+    </span>
   );
 }
-
-export const logger = {
-  info(message: string, context?: LogContext) {
-    console.info(message, sanitizeContext(context));
-  },
-  warn(message: string, context?: LogContext) {
-    console.warn(message, sanitizeContext(context));
-  },
-  error(message: string, context?: LogContext) {
-    console.error(message, sanitizeContext(context));
-  }
-};

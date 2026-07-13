@@ -1,8 +1,8 @@
-import { TrendingUp } from "lucide-react";
+import { HandHeart } from "lucide-react";
 import { EmptyModule } from "@/features/platform/empty-module";
 
-export const metadata = { title: "Relatorio" };
+export const metadata = { title: "Oracoes" };
 
-export default function ReportPage() {
-  return <EmptyModule description="Relatorios positivos de evolucao sem expor respostas privadas do parceiro." icon={TrendingUp} title="Relatorio" />;
+export default function PrayersPage() {
+  return <EmptyModule description="Pedidos de oracao privados, compartilhados voluntariamente ou conjuntos." icon={HandHeart} title="Oracoes" />;
 }

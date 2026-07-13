@@ -1,60 +1,28 @@
-"use client";
-
 import type { ReactNode } from "react";
-import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { IconButton } from "@/components/ui/icon-button";
+import { BrandLogo } from "@/components/brand";
 
-export function Modal({ title, children, open, onClose }: { title: string; children: ReactNode; open: boolean; onClose: () => void }) {
-  if (!open) return null;
-
+export function AuthShell({ children, title, description }: { children: ReactNode; title: string; description: string }) {
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-text-primary/30 p-4">
-      <section aria-modal="true" className="w-full max-w-lg rounded-xl bg-surface p-5 shadow-soft" role="dialog">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-semibold text-text-primary">{title}</h2>
-          <IconButton label="Fechar" onClick={onClose} type="button">
-            <X className="size-4" />
-          </IconButton>
+    <main className="grid min-h-screen bg-background-main px-4 py-8 lg:grid-cols-[1fr_560px] lg:px-0 lg:py-0">
+      <section className="hidden bg-background-soft px-12 py-10 lg:flex lg:flex-col lg:justify-between">
+        <BrandLogo className="w-52" />
+        <div className="max-w-lg">
+          <p className="font-serif text-4xl leading-tight text-text-primary">
+            Fortaleca sua fe. Proteja seu relacionamento.
+          </p>
+          <p className="mt-5 text-base leading-7 text-text-secondary">
+            Uma base serena para transformar devocional, conversa e compromisso em uma jornada compartilhada.
+          </p>
         </div>
-        <div className="mt-4">{children}</div>
       </section>
-    </div>
-  );
-}
-
-export function Drawer({ children, open }: { children: ReactNode; open: boolean }) {
-  return (
-    <aside className={cn("fixed inset-y-0 right-0 z-40 w-80 bg-surface p-5 shadow-soft transition-transform", open ? "translate-x-0" : "translate-x-full")}>
-      {children}
-    </aside>
-  );
-}
-
-export function BottomSheet({ children, open }: { children: ReactNode; open: boolean }) {
-  return (
-    <div className={cn("fixed inset-x-0 bottom-0 z-40 rounded-t-2xl bg-surface p-5 shadow-soft transition-transform md:hidden", open ? "translate-y-0" : "translate-y-full")}>
-      {children}
-    </div>
-  );
-}
-
-export function Toast({ title, description }: { title: string; description?: string }) {
-  return (
-    <div className="rounded-lg bg-text-primary px-4 py-3 text-sm text-white shadow-soft" role="status">
-      <p className="font-semibold">{title}</p>
-      {description ? <p className="mt-1 text-white/75">{description}</p> : null}
-    </div>
-  );
-}
-
-export function Tooltip({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <span className="group relative inline-flex">
-      {children}
-      <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 hidden -translate-x-1/2 rounded-md bg-text-primary px-2 py-1 text-xs text-white group-hover:block">
-        {label}
-      </span>
-    </span>
+      <section className="mx-auto flex w-full max-w-md flex-col justify-center">
+        <div className="mb-10 lg:hidden">
+          <BrandLogo className="w-48" />
+        </div>
+        <h1 className="text-3xl font-semibold text-text-primary">{title}</h1>
+        <p className="mt-3 text-sm leading-6 text-text-secondary">{description}</p>
+        <div className="mt-8">{children}</div>
+      </section>
+    </main>
   );
 }

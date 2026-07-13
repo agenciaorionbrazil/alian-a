@@ -1,14 +1,8 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { ShieldCheck } from "lucide-react";
+import { EmptyModule } from "@/features/platform/empty-module";
 
-export async function GET(request: NextRequest) {
-  const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get("code");
+export const metadata = { title: "Admin" };
 
-  if (code) {
-    const supabase = await createSupabaseServerClient();
-    await supabase.auth.exchangeCodeForSession(code);
-  }
-
-  return NextResponse.redirect(new URL("/hoje", requestUrl.origin));
+export default function AdminPage() {
+  return <EmptyModule description="Area administrativa protegida por perfil admin e politicas no banco." icon={ShieldCheck} title="Admin" />;
 }

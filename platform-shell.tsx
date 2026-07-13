@@ -1,8 +1,8 @@
-import { BookOpen } from "lucide-react";
+import { HeartHandshake } from "lucide-react";
 import { EmptyModule } from "@/features/platform/empty-module";
 
-export const metadata = { title: "Devocional" };
+export const metadata = { title: "Conexao" };
 
-export default function DevotionalPage() {
-  return <EmptyModule description="Devocional diario, contexto biblico revisado, aplicacao pratica e oracao." icon={BookOpen} title="Devocional" />;
+export default function ConnectionPage() {
+  return <EmptyModule description="Atividades e compromissos do casal com visibilidade compartilhada autorizada." icon={HeartHandshake} title="Conexao" />;
 }

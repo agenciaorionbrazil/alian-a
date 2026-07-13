@@ -1,16 +1,34 @@
-"use client";
+import type { Metadata, Viewport } from "next";
+import { PWARegister } from "@/components/pwa-register";
+import "./globals.css";
 
-import { Button, ErrorState } from "@/components/ui";
+export const metadata: Metadata = {
+  title: {
+    default: "ALIANCA",
+    template: "%s | ALIANCA"
+  },
+  description: "Fortaleca sua fe. Proteja seu relacionamento.",
+  applicationName: "ALIANCA",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/brand/alianca-logo.png",
+    apple: "/brand/alianca-logo.png"
+  }
+};
 
-export default function Error({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export const viewport: Viewport = {
+  themeColor: "#7A2348",
+  width: "device-width",
+  initialScale: 1
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <main className="grid min-h-screen place-items-center bg-background-main px-4">
-      <div className="w-full max-w-lg">
-        <ErrorState description="Encontramos um erro inesperado. Tente novamente em instantes." title="Algo saiu do fluxo" />
-        <Button className="mt-5" onClick={reset} type="button">
-          Tentar novamente
-        </Button>
-      </div>
-    </main>
+    <html lang="pt-BR">
+      <body>
+        {children}
+        <PWARegister />
+      </body>
+    </html>
   );
 }

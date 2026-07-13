@@ -1,34 +1,20 @@
-import type { Metadata, Viewport } from "next";
-import { PWARegister } from "@/components/pwa-register";
-import "./globals.css";
+import type { MetadataRoute } from "next";
 
-export const metadata: Metadata = {
-  title: {
-    default: "ALIANCA",
-    template: "%s | ALIANCA"
-  },
-  description: "Fortaleca sua fe. Proteja seu relacionamento.",
-  applicationName: "ALIANCA",
-  manifest: "/manifest.webmanifest",
-  icons: {
-    icon: "/brand/alianca-logo.png",
-    apple: "/brand/alianca-logo.png"
-  }
-};
-
-export const viewport: Viewport = {
-  themeColor: "#7A2348",
-  width: "device-width",
-  initialScale: 1
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html lang="pt-BR">
-      <body>
-        {children}
-        <PWARegister />
-      </body>
-    </html>
-  );
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: "ALIANCA",
+    short_name: "ALIANCA",
+    description: "Fortaleca sua fe. Proteja seu relacionamento.",
+    start_url: "/hoje",
+    display: "standalone",
+    background_color: "#FFFDFC",
+    theme_color: "#7A2348",
+    icons: [
+      {
+        src: "/brand/alianca-logo.png",
+        sizes: "any",
+        type: "image/png"
+      }
+    ]
+  };
 }

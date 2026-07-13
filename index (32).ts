@@ -1,8 +1,12 @@
-import { Library } from "lucide-react";
-import { EmptyModule } from "@/features/platform/empty-module";
+import type { ReactNode } from "react";
+import { PlatformShell } from "@/components/layout";
+import { hasSupabaseEnv } from "@/lib/env";
+import { requireUser } from "@/lib/auth/session";
 
-export const metadata = { title: "Biblioteca" };
+export default async function OnboardingLayout({ children }: { children: ReactNode }) {
+  if (hasSupabaseEnv()) {
+    await requireUser();
+  }
 
-export default function LibraryPage() {
-  return <EmptyModule description="Base revisada para versiculos, contextos biblicos e fundamentos centrais." icon={Library} title="Biblioteca" />;
+  return <PlatformShell>{children}</PlatformShell>;
 }

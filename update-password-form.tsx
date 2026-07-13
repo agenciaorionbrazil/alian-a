@@ -1,12 +1,12 @@
 import { AuthShell } from "@/components/layout";
-import { SignInForm } from "@/features/auth/sign-in-form";
+import { UpdatePasswordForm } from "@/features/auth/update-password-form";
 
-export const metadata = { title: "Entrar" };
+export const metadata = { title: "Atualizar senha" };
 
-export default function SignInPage() {
+export default function UpdatePasswordPage() {
   return (
-    <AuthShell description="Acesse sua jornada diaria com seguranca." title="Entrar">
-      <SignInForm />
+    <AuthShell description="Escolha uma nova senha para continuar sua jornada." title="Atualizar senha">
+      <UpdatePasswordForm />
     </AuthShell>
   );
 }

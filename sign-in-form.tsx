@@ -1,5 +1,12 @@
-import type { ReactNode } from "react";
+import { AuthShell } from "@/components/layout";
+import { RecoverPasswordForm } from "@/features/auth/recover-password-form";
 
-export default function AuthLayout({ children }: { children: ReactNode }) {
-  return children;
+export const metadata = { title: "Recuperar senha" };
+
+export default function RecoverPasswordPage() {
+  return (
+    <AuthShell description="Receba um link seguro para definir uma nova senha." title="Recuperar senha">
+      <RecoverPasswordForm />
+    </AuthShell>
+  );
 }

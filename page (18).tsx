@@ -1,20 +1,19 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createCoupleSchema } from "@/lib/validation/couple";
+import { acceptInviteSchema } from "@/lib/validation/couple";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getSafeErrorMessage } from "@/lib/errors";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = createCoupleSchema.parse(await request.json());
+    const body = acceptInviteSchema.parse(await request.json());
     const supabase = await createSupabaseServerClient();
-    const { data, error } = await supabase.rpc("create_couple_with_member", {
-      p_relationship_type: body.relationshipType,
-      p_started_on: body.startedOn || null,
-      p_journey_name: body.journeyName || null
+    const { data, error } = await supabase.rpc("accept_partner_invite", {
+      p_public_code: body.code,
+      p_token: body.token
     });
 
     if (error) {
-      return NextResponse.json({ error: "Nao foi possivel criar a relacao." }, { status: 400 });
+      return NextResponse.json({ error: "Convite invalido, expirado ou ja utilizado." }, { status: 400 });
     }
 
     return NextResponse.json({ coupleId: data });

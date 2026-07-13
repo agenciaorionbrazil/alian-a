@@ -1,44 +1,28 @@
-import {
-  BookOpen,
-  CalendarHeart,
-  CircleUserRound,
-  HandHeart,
-  HeartHandshake,
-  Home,
-  Library,
-  MessageCircleHeart,
-  PanelLeft,
-  Settings,
-  ShieldAlert,
-  Sparkles,
-  TrendingUp
-} from "lucide-react";
+import type { ReactNode } from "react";
+import Link from "next/link";
+import { BrandLogo } from "@/components/brand";
+import { Button } from "@/components/ui";
 
-export const platformNavigation = [
-  { href: "/hoje", label: "Hoje", icon: Home },
-  { href: "/devocional", label: "Devocional", icon: BookOpen },
-  { href: "/sos", label: "SOS", icon: ShieldAlert },
-  { href: "/jornada", label: "Jornada", icon: CalendarHeart },
-  { href: "/conexao", label: "Conexao", icon: HeartHandshake },
-  { href: "/gratidao", label: "Gratidao", icon: Sparkles },
-  { href: "/oracoes", label: "Oracoes", icon: HandHeart },
-  { href: "/biblioteca", label: "Biblioteca", icon: Library },
-  { href: "/relatorio", label: "Relatorio", icon: TrendingUp },
-  { href: "/perfil", label: "Perfil", icon: CircleUserRound },
-  { href: "/configuracoes", label: "Ajustes", icon: Settings }
-];
-
-export const mainMobileNavigation = [
-  platformNavigation[0],
-  platformNavigation[1],
-  platformNavigation[2],
-  platformNavigation[3],
-  { href: "/perfil", label: "Mais", icon: PanelLeft }
-];
-
-export const publicNavigation = [
-  { href: "/entrar", label: "Entrar" },
-  { href: "/cadastro", label: "Cadastro" }
-];
-
-export const messageIcon = MessageCircleHeart;
+export function PublicShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="min-h-screen bg-background-main">
+      <header className="sticky top-0 z-30 border-b border-divider/70 bg-background-main/86 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5">
+          <BrandLogo className="w-40 sm:w-48" />
+          <nav className="flex items-center gap-1.5 rounded-full bg-surface/82 p-1 shadow-[0_8px_22px_rgba(36,29,33,0.06)] ring-1 ring-divider/80">
+            <Link
+              className="rounded-full px-4 py-2 text-sm font-semibold text-text-secondary transition hover:bg-background-soft hover:text-brand-primary"
+              href="/entrar"
+            >
+              Entrar
+            </Link>
+            <Button className="rounded-full px-5" href="/cadastro">
+              Comecar
+            </Button>
+          </nav>
+        </div>
+      </header>
+      {children}
+    </div>
+  );
+}

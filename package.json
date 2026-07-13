@@ -1,46 +1,120 @@
-{
-  "name": "alianca",
-  "version": "0.1.0",
-  "private": true,
-  "engines": {
-    "node": "20.x"
-  },
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "netlify:build": "next build && node scripts/verify-netlify-build.mjs",
-    "start": "next start",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "check": "npm run typecheck && npm run lint && npm run test && npm run build"
-  },
-  "dependencies": {
-    "@hookform/resolvers": "3.10.0",
-    "@supabase/ssr": "0.5.2",
-    "@supabase/supabase-js": "2.48.1",
-    "clsx": "2.1.1",
-    "lucide-react": "0.468.0",
-    "next": "15.1.3",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-hook-form": "7.54.2",
-    "tailwind-merge": "2.6.0",
-    "zod": "3.24.1"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "6.6.3",
-    "@testing-library/react": "16.1.0",
-    "@types/node": "20.17.10",
-    "@types/react": "19.0.2",
-    "@types/react-dom": "19.0.2",
-    "autoprefixer": "10.4.20",
-    "eslint": "9.17.0",
-    "eslint-config-next": "15.1.3",
-    "jsdom": "25.0.1",
-    "postcss": "8.4.49",
-    "tailwindcss": "3.4.17",
-    "typescript": "5.7.2",
-    "vitest": "2.1.8"
-  }
-}
+# Deploy no GitHub e Netlify
+
+## 1. Subir no GitHub
+
+Na raiz do projeto:
+
+```bash
+git init
+git add .
+git commit -m "Initial ALIANCA platform foundation"
+git branch -M main
+git remote add origin https://github.com/SEU-USUARIO/alianca.git
+git push -u origin main
+```
+
+Nao suba `.env.local`, `node_modules`, `.next`, `.npm-cache` ou `.corepack`.
+
+## 2. Criar projeto no Netlify
+
+1. Acesse Netlify.
+2. Escolha Add new project > Import an existing project.
+3. Conecte o repositorio GitHub.
+4. Use:
+   - Build command: `npm run netlify:build`
+   - Publish directory: `.next`
+   - Node version: `20`
+
+O arquivo `netlify.toml` ja define essas opcoes.
+
+Se o Netlify mostrar erro dizendo que `/opt/build/repo/public` nao contem um build Next.js, a configuracao da UI ainda esta apontando para `public`. Corrija em:
+
+```text
+Site configuration > Build & deploy > Build settings
+```
+
+Use exatamente:
+
+```text
+Build command: npm run netlify:build
+Publish directory: .next
+```
+
+Depois rode:
+
+```text
+Deploys > Trigger deploy > Clear cache and deploy site
+```
+
+Se existir o plugin `@netlify/plugin-nextjs` instalado em `Integrations > Plugins`, ele pode ficar ativo, mas precisa usar `Publish directory: .next`. Nao use `public` para Next.js com SSR/API routes.
+
+O projeto esta travado em Node 20 LTS porque algumas versoes recentes de dependencias, especialmente Supabase JS, passaram a exigir Node 22. As dependencias centrais foram fixadas no `package.json` e no `package-lock.json` para manter o build estavel no Netlify.
+
+O Next.js esta fixado em `15.5.20`, acima das versoes bloqueadas pela advisory de seguranca React/Next da Netlify. Nao reduza para `15.5.6` ou anterior.
+
+Se aparecer bloqueio de vulnerabilidade do Next.js:
+
+1. Confirme que `package.json` contem `next: 15.5.20`.
+2. Confirme que `package-lock.json` tambem resolveu `node_modules/next` em `15.5.20`.
+3. Faca commit dos dois arquivos.
+4. Rode `Deploys > Trigger deploy > Clear cache and deploy site`.
+
+## 3. Variaveis no Netlify
+
+Em Site configuration > Environment variables, cadastre:
+
+```bash
+NEXT_PUBLIC_APP_URL=https://SEU-SITE.netlify.app
+NEXT_PUBLIC_SUPABASE_URL=https://SEU-PROJETO.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=SUA_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY=SUA_SERVICE_ROLE_KEY
+NETLIFY_NEXT_SKEW_PROTECTION=true
+```
+
+`SUPABASE_SERVICE_ROLE_KEY` nao deve ser usado no browser. Hoje ela esta documentada para uso administrativo futuro do servidor.
+
+## 4. Supabase Auth para producao
+
+No Supabase, configure Authentication > URL Configuration:
+
+Site URL:
+
+```text
+https://SEU-SITE.netlify.app
+```
+
+Redirect URLs:
+
+```text
+https://SEU-SITE.netlify.app/api/auth/callback
+https://SEU-SITE.netlify.app/atualizar-senha
+http://localhost:3000/api/auth/callback
+http://localhost:3000/atualizar-senha
+```
+
+## 5. Banco e Storage
+
+Execute a migracao:
+
+```text
+supabase/migrations/20260712201000_initial_security_foundation.sql
+```
+
+Ela cria tabelas, RLS, RPCs de convite/casal e buckets Storage.
+
+## 6. Checagem pos-deploy
+
+Depois do deploy:
+
+1. Abra `/`.
+2. Cadastre um usuario em `/cadastro`.
+3. Confirme e-mail se essa opcao estiver ativa no Supabase.
+4. Entre em `/entrar`.
+5. Abra `/perfil` e salve o perfil.
+6. Abra `/configuracoes` e salve consentimentos/preferencias.
+7. Abra `/convite`, crie uma relacao e gere convite.
+8. Entre com outro usuario e aceite o link de convite.
+
+## 7. Observacao Netlify + Next.js
+
+A Netlify atualmente suporta Next.js moderno via OpenNext com configuracao automatica. Por isso o projeto nao fixa `@netlify/plugin-nextjs`; isso permite que a Netlify use o adaptador mais recente em cada build.

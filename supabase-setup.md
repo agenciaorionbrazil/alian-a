@@ -1,12 +1,16 @@
-import type { ReactNode } from "react";
-import { PlatformShell } from "@/components/layout";
-import { hasSupabaseEnv } from "@/lib/env";
-import { requireUser } from "@/lib/auth/session";
+import { PageHeader } from "@/components/ui";
+import { InviteFlow } from "@/features/platform/invite-flow";
 
-export default async function PlatformLayout({ children }: { children: ReactNode }) {
-  if (hasSupabaseEnv()) {
-    await requireUser();
-  }
+export const metadata = { title: "Convite" };
 
-  return <PlatformShell>{children}</PlatformShell>;
+export default function InvitePage() {
+  return (
+    <>
+      <PageHeader
+        description="Crie uma relacao, gere um convite seguro ou aceite um convite recebido."
+        title="Convite"
+      />
+      <InviteFlow />
+    </>
+  );
 }

@@ -1,12 +1,8 @@
-import type { ReactNode } from "react";
-import { PlatformShell } from "@/components/layout";
-import { hasSupabaseEnv } from "@/lib/env";
-import { requireUser } from "@/lib/auth/session";
+import { ListChecks } from "lucide-react";
+import { EmptyModule } from "@/features/platform/empty-module";
 
-export default async function OnboardingLayout({ children }: { children: ReactNode }) {
-  if (hasSupabaseEnv()) {
-    await requireUser();
-  }
+export const metadata = { title: "Quiz" };
 
-  return <PlatformShell>{children}</PlatformShell>;
+export default function QuizPage() {
+  return <EmptyModule description="Diagnostico inicial com respostas individuais protegidas por RLS." icon={ListChecks} title="Quiz" />;
 }

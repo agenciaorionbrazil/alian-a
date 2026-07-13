@@ -1,40 +1,35 @@
+import { randomBytes } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
+import { createInviteSchema } from "@/lib/validation/couple";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { preferencesSchema } from "@/lib/validation/profile";
+import { absoluteUrl } from "@/lib/utils";
 import { getSafeErrorMessage } from "@/lib/errors";
 
-export async function GET() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  if (!user) return NextResponse.json({ error: "Nao autenticado." }, { status: 401 });
-
-  const { data } = await supabase.from("user_preferences").select("*").eq("user_id", user.id).maybeSingle();
-  return NextResponse.json({ preferences: data });
-}
-
-export async function PUT(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const body = preferencesSchema.parse(await request.json());
+    const body = createInviteSchema.parse(await request.json());
+    const token = randomBytes(32).toString("base64url");
     const supabase = await createSupabaseServerClient();
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
 
-    if (!user) return NextResponse.json({ error: "Nao autenticado." }, { status: 401 });
-
-    const { error } = await supabase.from("user_preferences").upsert({
-      user_id: user.id,
-      devotional_time: body.devotionalTime || null,
-      timezone: body.timezone,
-      notifications_enabled: body.notificationsEnabled
+    const { data, error } = await supabase.rpc("create_partner_invite", {
+      p_couple_id: body.coupleId,
+      p_invited_email: body.invitedEmail || null,
+      p_invited_phone: body.invitedPhone || null,
+      p_token: token
     });
 
-    if (error) return NextResponse.json({ error: "Nao foi possivel salvar preferencias." }, { status: 400 });
+    if (error || !data?.[0]) {
+      return NextResponse.json({ error: "Nao foi possivel criar o convite." }, { status: 400 });
+    }
 
-    return NextResponse.json({ ok: true });
+    const invite = data[0];
+    const inviteUrl = absoluteUrl(`/convite?code=${encodeURIComponent(invite.public_code)}&token=${encodeURIComponent(token)}`);
+
+    return NextResponse.json({
+      publicCode: invite.public_code,
+      expiresAt: invite.expires_at,
+      inviteUrl
+    });
   } catch (error) {
     return NextResponse.json({ error: getSafeErrorMessage(error) }, { status: 400 });
   }

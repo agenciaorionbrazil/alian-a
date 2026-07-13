@@ -1,16 +1,8 @@
-import { PageHeader } from "@/components/ui";
-import { SettingsForm } from "@/features/platform/settings-form";
+import { Library } from "lucide-react";
+import { EmptyModule } from "@/features/platform/empty-module";
 
-export const metadata = { title: "Configuracoes" };
+export const metadata = { title: "Biblioteca" };
 
-export default function SettingsPage() {
-  return (
-    <>
-      <PageHeader
-        description="Preferencias e consentimentos ficam persistidos individualmente. Consentimentos opcionais nunca sao pre-marcados."
-        title="Configuracoes"
-      />
-      <SettingsForm />
-    </>
-  );
+export default function LibraryPage() {
+  return <EmptyModule description="Base revisada para versiculos, contextos biblicos e fundamentos centrais." icon={Library} title="Biblioteca" />;
 }
